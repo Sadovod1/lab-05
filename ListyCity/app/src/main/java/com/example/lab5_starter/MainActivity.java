@@ -79,7 +79,10 @@ public class MainActivity extends AppCompatActivity implements CityDialogFragmen
             CityDialogFragment cityDialogFragment = CityDialogFragment.newInstance(city);
             cityDialogFragment.show(getSupportFragmentManager(),"City Details");
         });
-
+        cityListView.setOnItemClickListener((adapterView, view, position, id) -> {
+            City city = cityArrayAdapter.getItem(position);
+            deleteCity(city);
+        });
     }
 
     @Override
@@ -98,6 +101,13 @@ public class MainActivity extends AppCompatActivity implements CityDialogFragmen
 
         DocumentReference docRef = citiesRef.document(city.getName());
         docRef.set(city);
+    }
+
+    public void deleteCity(City city){
+        cityArrayList.remove(city);
+        cityArrayAdapter.notifyDataSetChanged();
+        DocumentReference docRef = citiesRef.document(city.getName());
+        docRef.delete();
     }
 
     public void addDummyData(){
